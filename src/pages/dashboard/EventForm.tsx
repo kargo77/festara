@@ -62,14 +62,19 @@ const EventForm = () => {
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     setLoading(true);
     const payload = {
-      ...parsed.data,
+      title: parsed.data.title,
+      description: parsed.data.description,
+      location: parsed.data.location,
+      capacity: parsed.data.capacity,
+      cover_url: parsed.data.cover_url,
+      published: parsed.data.published,
       starts_at: new Date(parsed.data.starts_at).toISOString(),
       ends_at: parsed.data.ends_at ? new Date(parsed.data.ends_at).toISOString() : null,
       organizer_id: user.id,
     };
     const { error } = isEdit && id
       ? await supabase.from("events").update(payload).eq("id", id)
-      : await supabase.from("events").insert([payload]);
+      : await supabase.from("events").insert(payload);
     setLoading(false);
     if (error) { toast.error(error.message); return; }
     toast.success(isEdit ? "Event updated" : "Event created");
