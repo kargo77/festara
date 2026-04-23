@@ -69,7 +69,7 @@ const EventForm = () => {
     };
     const { error } = isEdit && id
       ? await supabase.from("events").update(payload).eq("id", id)
-      : await supabase.from("events").insert(payload);
+      : await supabase.from("events").insert([payload]);
     setLoading(false);
     if (error) { toast.error(error.message); return; }
     toast.success(isEdit ? "Event updated" : "Event created");
